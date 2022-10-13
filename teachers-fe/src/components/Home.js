@@ -27,19 +27,7 @@ class Home extends Component {
   render() {
     return (
       <Container style={{ marginTop: "20px" }}>
-        <Row>
-          <Col>
-            <TeacherList
-              teachers={this.state.teachers}
-              resetState={this.resetState}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col>
-            <NewTeacherModal create={true} resetState={this.resetState} />
-          </Col>
-        </Row>
+        
       </Container>
     );
   }
