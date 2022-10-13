@@ -5,4 +5,4 @@ class TeacherSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Teacher 
-        fields = ('pk', 'name', 'email', 'document', 'phone', 'registrationDate')
+        fields = ('pk', 'name', 'email', 'document', 'phone', 'registrationDate', 'is_staff')
