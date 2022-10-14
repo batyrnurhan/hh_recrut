@@ -7,4 +7,4 @@ from rest_framework.parsers import JSONParser
 class TeacherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
-        fields = ('pk', 'name', 'surname', 'email', 'phone', 'document', 'cat', 'is_staff')
+        fields = "__all__"
