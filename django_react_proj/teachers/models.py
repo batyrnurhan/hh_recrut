@@ -1,4 +1,5 @@
 from enum import unique
+from tabnanny import verbose
 from django.db import models
 
 # Create your models here.
@@ -11,6 +12,7 @@ class Teacher(models.Model):
     is_staff = models.BooleanField(default =False)
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
     registrationDate = models.DateField("Registration Date", auto_now_add=True)
+    #user = models.ForeignKey(User, verbose_name="User", on_delete=models.CASCADE)
 
 
     def __str__(self):
