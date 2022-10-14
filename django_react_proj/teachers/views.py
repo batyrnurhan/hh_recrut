@@ -1,41 +1,52 @@
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
-
+from rest_framework import generics
+from rest_framework.views import APIView
 from .models import Teacher
-from .serializers import *
+from .serializers import TeacherSerializer
+from rest_framework.response import Response
+from django.forms import model_to_dict
+from django.http import Http404
+##vid to est kak smotretsia budet
 
-@api_view(['GET', 'POST'])
-def teachers_list(request):
-    if request.method == 'GET':
-        data = Teacher.objects.all()
 
-        serializer = TeacherSerializer(data, context={'request': request}, many=True)
+class TeacherAPIList(generics.ListCreateAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = TeacherSerializer
 
-        return Response(serializer.data)
+class TeacherAPIView(APIView):
+    def get_object(self, pk):
+        try:
+            return Teacher.objects.get(pk=pk)
+        except Teacher.DoesNotExist:
+            raise Http404
 
-    elif request.method == 'POST':
-        serializer = TeacherSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_201_CREATED)
+    def get(self, request):
+        t = Teacher.objects.all()
+        return Response({'posts': TeacherSerializer(t, many=True).data})
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        serializer = TeacherSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
-@api_view(['PUT', 'DELETE'])
-def teachers_detail(request, pk):
-    try:
-        teacher = Teacher.objects.get(pk=pk)
-    except Teacher.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        return Response({'post': serializer.data})
 
-    if request.method == 'PUT':
-        serializer = TeacherSerializer(teacher, data=request.data,context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, *args, **kwargs):
+        pk = kwargs.get('pk', None)
 
-    elif request.method == 'DELETE':
-        teacher.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if not pk:
+            return Response({"error": "METHOD PUT not allowed"})
+
+        try:
+            instance = Teacher.objects.get(pk=pk)
+        except:
+            return Response({"error": "Object doesnt exists"})
+
+        serializer = TeacherSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"post": serializer.data})
+
+    def delete(self, request, pk, **kwargs):
+        event = self.get_object(pk)
+        event.delete()
+        return Response({"post": "deleted"})

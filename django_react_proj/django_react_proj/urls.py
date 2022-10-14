@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import path, re_path
-from teachers import views
+from teachers.views import TeacherAPIView,TeacherAPIList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^api/teachers/$', views.teachers_list),
-    re_path(r'^api/teachers/([0-9])$', views.teachers_detail),
+    path('api/v1/teacherslist', TeacherAPIList.as_view()),
+    path('api/v1/teacherslist/<int:pk>', TeacherAPIList.as_view()),
 ]
