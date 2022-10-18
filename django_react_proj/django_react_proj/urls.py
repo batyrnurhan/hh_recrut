@@ -17,7 +17,7 @@ urlpatterns = [
     #path('api/v1/teachers/', TeacherAPIList.as_view()),
     #path('api/v1/teachers/<int:pk>/', TeacherAPIUpdate.as_view()),
     #path('api/v1/teachersdelete/<int:pk>/', TeacherAPIDestroy.as_view()),
-    
+
     path('api/v1/auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
 ]
